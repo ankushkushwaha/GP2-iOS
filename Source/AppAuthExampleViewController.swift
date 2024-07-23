@@ -16,6 +16,7 @@
 //  limitations under the License.
 //
 
+
 import AppAuth
 import UIKit
 
@@ -24,7 +25,17 @@ typealias PostRegistrationCallback = (_ configuration: OIDServiceConfiguration?,
 /**
  The OIDC issuer from which the configuration will be discovered.
 */
-let kIssuer: String = "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9";
+
+/*
+ 
+ https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0/.well-known/openid-configuration
+ 
+mobilemgrdevuser1@mail.com
+Solera2024!
+ 
+ */
+
+let kIssuer: String = "https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0";
 
 /**
  The OAuth client ID.
@@ -32,14 +43,14 @@ let kIssuer: String = "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_Cuh
  For client configuration instructions, see the [README](https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md).
  Set to nil to use dynamic registration with this example.
 */
-let kClientID: String? = "53osemtot8tp3n3qct5r2hijk3";
+let kClientID: String? = "b453a24f-79c5-45a2-b567-da7244a9af4e";
 
 /**
  The OAuth redirect URI for the client @c kClientID.
 
  For client configuration instructions, see the [README](https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md).
 */
-let kRedirectURI: String = "net.openid.appauthdemo:/oauth2redirect";
+let kRedirectURI: String = "net.openid.appauthdemo://oauth2redirect";
 
 /**
  NSCoding key for the authState property.
@@ -383,7 +394,7 @@ extension AppAuthExampleViewController {
         let request = OIDAuthorizationRequest(configuration: configuration,
                                               clientId: clientID,
                                               clientSecret: clientSecret,
-                                              scopes: [OIDScopeOpenID, OIDScopeProfile],
+                                              scopes: [OIDScopeOpenID],
                                               redirectURL: redirectURI,
                                               responseType: OIDResponseTypeCode,
                                               additionalParameters: nil)
