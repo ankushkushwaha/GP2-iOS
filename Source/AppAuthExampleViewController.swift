@@ -33,28 +33,42 @@ typealias PostRegistrationCallback = (_ configuration: OIDServiceConfiguration?,
 mobilemgrdevuser1@mail.com
 Solera2024!
  
+ 
+ User: guestuser@example.com
+ Password: GuestPassword1
+ 
  */
 
-let kIssuer: String = "https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0";
 
-/**
- The OAuth client ID.
+// net.openid.appauthdemo:/oauth2redirect?code=707d253a-3b39-4b29-8ed2-70f0e2357de9&state=0Q4ChT_1ZkUJQNCkFRDkdkZH3UnGEKGMlUdsnX8qo_I
 
- For client configuration instructions, see the [README](https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md).
- Set to nil to use dynamic registration with this example.
-*/
-let kClientID: String? = "b453a24f-79c5-45a2-b567-da7244a9af4e";
+//Printing description of response:
+//<OIDAuthorizationResponse: 0x600002149310, authorizationCode: 2afe197d-a896-403c-976e-22840cc0face, state: "s6gNGV0_dX3Zw1A9PHZzppxm537GZT4ORtPptyLiQTU", accessToken: "(null)", accessTokenExpirationDate: (null), tokenType: (null), idToken: "(null)", scope: "(null)", additionalParameters: {
+//}, request: <OIDAuthorizationRequest: 0x600002921420, request: https://login.authsamples.com/oauth2/authorize?nonce=rICPIbuDuyzadK9IgZQcuzdR8CDFRLEt4E9jnfzgcnQ&response_type=code&code_challenge_method=S256&scope=openid&code_challenge=sPmtC4GCyDd9_HwSL-tSh6WblyAdOabBcUyuYI-9e-s&redirect_uri=net.openid.appauthdemo:/oauth2redirect&client_id=53osemtot8tp3n3qct5r2hijk3&state=s6gNGV0_dX3Zw1A9PHZzppxm537GZT4ORtPptyLiQTU>>
 
-/**
- The OAuth redirect URI for the client @c kClientID.
 
- For client configuration instructions, see the [README](https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md).
-*/
-let kRedirectURI: String = "net.openid.appauthdemo://oauth2redirect";
 
-/**
- NSCoding key for the authState property.
-*/
+let kIssuer: String = "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9";
+let kClientID: String? = "53osemtot8tp3n3qct5r2hijk3";
+let kRedirectURI: String = "net.openid.appauthdemo:/oauth2redirect";
+
+
+//let kIssuer: String = "https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0";
+//let kClientID: String? = "b453a24f-79c5-45a2-b567-da7244a9af4e";
+//let kRedirectURI: String = "net.openid.appauthdemo://oauth2redirect/";
+
+
+
+
+//Printing description of response:
+//<OIDAuthorizationResponse: 0x6000021340a0, authorizationCode: eyJraWQiOiJmdk1vbXVYc21RRVgyVXpRcmFrYUpxNTVlS1lma0JjOHFUbWxkUW5iM25VIiwidmVyIjoiMS4wIiwiemlwIjoiRGVmbGF0ZSIsInNlciI6IjEuMCJ9.uCno6bMvWIRPhdKUPigoOzD8IiWDYK5QzpQtjSeER-OHkQPCmGiYJM7fg17GOzHv80q_V37DMF3E6fNw5ULPgWeCDRaRmya1fQ1R4ShMO-F8fLMZ_UboY1QrVrif0E-99TqH3_XRAwrLoZbgvubc2dkkFcAkrqP2fWaIQ7LReAs7Genr5JxilERvT5yxdWg6X-Qwa1lfapeCzzkJAjfVpV8gX8KIJ8r8E_paYQuotOMZ-UBiH-3fdWFA0WLs00P8lGuAd4CXeOMI7J5mWqS47h_FBadKPIUv_bpZnu4eTSv1aYd7JbTm52bEb9fOq-Wva2stlMHzK9tgwQdcnLl2cA.HPBIvxd3ImaTkeUI.OGBCBpx6iU3kUD-rZUn4u6tigEXyXBWeNoltRziro1hyY_rVZSel4HBhdsstbxgcz78gTBRu3pkL6qmdAC9OLYywUgd1tBnqXxit3V54FuKTWX0gFm_LATZ6D8hPV5DSbPiZsBC5RajSPJ-sCtYcB5Lb0HbGgcHvEWO9o93z4ih_6tlVcXnT00ZR90xxY8TopLDTQ8BAJlnz1RY0l8nCyP9LBp0xEthKjxQQV4DGFxp8dI_QQPJV4sayK7re5PVekQ1UTYW9ESdg_MsyAULPZrZriHUN_G1R75yK4PxPUcXLSMalZ7-_ezzkA5VTvH1_apgDrExnsYgb6cdo7AIteq_96mJ6unXfJ4Ow882ccDVYz_xN_x2fX_5J1LSGBgkiLvf42DNQMv5D7XA7bSSVZKpJtPUB6_jM0OL5F8upcbl5ElE36jhySYqeJ-f2VX98BQPZJLEk0P95OdqEJ5E0J4zGFkoN7SglX5WPnDuMX-Mn9UWA1QMeNCFuL6lMwoju2mGbA0knQtiSv7XaQNQXeBjlVP5dL2-DOTo6xZN2D3gnhgp8NBTfcw6aYMRr9n9qsxJIKJS1lfGj-LR516dFuetonzcgGB9kdQ90Fet-Lr6jLLKfPszzraF3-yyDre9CFOe-ADeetjoyzxNls7eVInA7jyOA6i1bBTze1znqdfOcjvdxl2uYU5fZJ2WxIcjVpgyl-h4Ph_NH_9ElR7nFNWbQE3G1qc1Jyzah_5-Bvy8YZalfBmUMQ-RFXrizigOub4naHD6_kcEC3acVo_HZA4Z-ZkFFMGicGwYk1BPXe5BC_dZhLnwT5ycidBdtk6dwU6n654E4Nb-ja6afPeQ9evUdrNWR6Q.7Fx3ugpNRyYHuGUqXae-Vw, state: "6f7eEDcpiBjMvYz781INTWk-xDmhobmSgTVloAm7XHc", accessToken: "(null)", accessTokenExpirationDate: (null), tokenType: (null), idToken: "(null)", scope: "(null)", additionalParameters: {
+//}, request: <OIDAuthorizationRequest: 0x600002924310, request: https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/authorize?nonce=AZYBmaBr858e4CV1eFo6cRDPdZmiruibgsqCTt3qSSU&response_type=code&code_challenge_method=S256&scope=openid&code_challenge=L89dMhetBQdglH8o_ego92SUk_nVINpXjTPycvh4MKo&redirect_uri=net.openid.appauthdemo://oauth2redirect/&client_id=b453a24f-79c5-45a2-b567-da7244a9af4e&state=6f7eEDcpiBjMvYz781INTWk-xDmhobmSgTVloAm7XHc>>
+
+
+
+// net.openid.appauthdemo://oauth2redirect/?state=F73gqzwXqMeBwVRqPKj4C3y9MNqJYjWLEaMnLRk1gLk&code=eyJraWQiOiJmdk1vbXVYc21RRVgyVXpRcmFrYUpxNTVlS1lma0JjOHFUbWxkUW5iM25VIiwidmVyIjoiMS4wIiwiemlwIjoiRGVmbGF0ZSIsInNlciI6IjEuMCJ9.vxbI--wYuRAaBDwdgo6uZQGM7GW8fks3I_QlK54yKbRQPdNkyx07ILNL0awp5D_79JBVOW-YmuQx5rkIjfydLjkxqy7WYBB39gtwsKk-J71UywYeUmkOl-jCJDsvOlfl8FxZAYrYsJmyNw3vq9EL_dIE22yztQHdcwWMydHGepMX9nYu9d6Ekurd-ayNNsWRKez3t3QbbYDRwta7tThZxEWYSlu0Opuebnw6bf6kkfWKranEOVHcMszVZWWEmm-bVpfFjkMoarVQJJwRRDRzrlmu2STTyvLLEsOZo5NqxuVzV0g6QG_T0x-sVs0X6OYUgdOXWbIZ69tSiv_71BUYYw.tkO23c_zdGomqlbt.PEvi8nAK26QjTFg7yLcGj0EV23E6ejhG2ryE2kAxcPAGX1GFDK6gUpwhmcjSA7Lw7mcmT22MK3bNgCwZpbkq3QHl7Y1Chy3dFONDni1VjDytnJxsqPDjQZ5OsTQbT5zJH9Ah1Ewqz6F7Z7NYnDow-KXzJDx5EglTjC2C61zwSmuur2PS5IzNvorf0njPRc4dBuIVaAiwCEaw-LF274_pc7FJgiBYjT9kqjCvUWQI8iPC44zO8rOjWEfbRQ3Cjp7_CWbc3Z4adPrLWT-a-q4chMMriTC1zDCuEEkCttU-NTjrso7Vbk981U6skrbJTlI4XDzw6wXhi4EEUJxx0DyS69YKO_o7TYXkc9ibqAZ-9Z4vaG60IAmlyysbqvR_cuwsSt2Mn_z4D_1L1PiH6imy24Aezd0sOmJXlbwhc5fCs780-kOyejmmuko8oAntk8eRCEbf7eFAp3JQ2My9mAToSQEM7TO3mlQQMHeuV8nTGifFB-ZR3_acLk1z7d9EKiV9hW9BgpAOHJlkKbU8dY0tl4c6PHTQ1UIN-DzZAAXVV1g8fEx4qWFvpWQPLS0wP3OIWLj7Jkp8bSFNf1-K_fNLaobpKSzdZf8WHUgY2sJh17FECvDqDRNwBqKCeMXQKCLYFwcQAl-QGWV9fj4r503xN2nMer3EGwhcBj-hwDC_cuQ_NwSXAePhsxt5HxqeFEfH-HsiOoAqnHyV51m1qElXW0-fnNdwvq4jCSrdO8ePh7C1FJ8Lxu_U90vkuU1AMv1Riky_zM4Wp0u9D4d9lznznwn488zbd3JoZ__nGeKAAwflw551ZiMhZz9-90Lftv3ups1q8h5UVOJxXPDWneEz6evll05gSnQGhU-r-A.SrzpMB5sTmV4uWx8AnUR-g
+
+
 let kAppAuthExampleAuthStateKey: String = "authState";
 
 
