@@ -82,6 +82,8 @@ class AppAuthExampleViewController: UIViewController {
     @IBOutlet private weak var trashButton: UIBarButtonItem!
 
     private var authState: OIDAuthState?
+    private var state: String?
+    private var externalUserAlertSession: OIDExternalUserAgentSession!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,12 +136,79 @@ extension AppAuthExampleViewController {
                 "with the scheme of your redirect URI. Full instructions: " +
                 "https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md")
     }
+    
+
+        public func logout(onSuccess: (() -> Void)? = nil) {
+
+
+            let logoutEndpointString = "https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/logout" + "/?redirect_uri=" + kRedirectURI
+
+            let logoutEndpoint = URL(string: logoutEndpointString)!
+
+            let configuration = OIDServiceConfiguration(authorizationEndpoint: URL(string: "https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/authorize")!,
+                                                        
+                                                        tokenEndpoint: URL(string: "https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/token")!,
+                                                        issuer: URL(string: "https://soleranab2bnprd.b2clogin.com/5b68ab67-a8f3-4b79-b5bd-af4c07631e0c/v2.0/")!,
+                                                        registrationEndpoint: URL(string: "https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/logout")!,
+                                                        endSessionEndpoint: URL(string: "https://soleranab2bnprd.b2clogin.com/soleranab2bnprd.onmicrosoft.com/b2c_1a_hrdsignin_v2/oauth2/v2.0/logout")!)
+
+            
+            
+            guard let idToken = authState?.lastTokenResponse?.idToken else {
+                return
+            }
+            
+            guard let state = self.state else {
+                return
+            }
+
+
+            let redirectUrl = URL(string: kRedirectURI)!
+            let endSessionRequest = OIDEndSessionRequest(
+                configuration: configuration,
+                idTokenHint: idToken,
+                postLogoutRedirectURL: redirectUrl,
+                state: state,
+                additionalParameters: nil)
+//
+            let agent = OIDExternalUserAgentIOS(presenting: self)
+//
+            self.externalUserAlertSession = OIDAuthorizationService.present(
+                endSessionRequest,
+                externalUserAgent: agent!) {[weak self] response, error in
+                    guard let `self` = self else { return }
+
+                    if let error = error {
+                        print("Authorization error: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let response = response else {
+                        print("Authorization response is nil.")
+                        return
+                    }
+
+                    print("Authorization response: \(response)")
+
+//                    HTTPCookieStorage.shared.cookies?.forEach { cookie in
+//                        HTTPCookieStorage.shared.deleteCookie(cookie)
+//                    }
+
+//                    UserDefaults.standard.flushAllSaveData()
+
+                    onSuccess?()
+                }
+        }
 
 }
 
 //MARK: IBActions
 extension AppAuthExampleViewController {
-
+    @IBAction func logout(_ sender: UIButton) {
+        logout {
+            print("Logout success")
+        }
+    }
     @IBAction func authWithAutoCodeExchange(_ sender: UIButton) {
 
         guard let issuer = URL(string: kIssuer) else {
@@ -408,7 +477,9 @@ extension AppAuthExampleViewController {
         let request = OIDAuthorizationRequest(configuration: configuration,
                                               clientId: clientID,
                                               clientSecret: clientSecret,
-                                              scopes: [OIDScopeOpenID],
+                                              scopes: ["b453a24f-79c5-45a2-b567-da7244a9af4e"
+                                                       ,OIDScopeOpenID,
+                                                       "offline_access"],
                                               redirectURL: redirectURI,
                                               responseType: OIDResponseTypeCode,
                                               additionalParameters: nil)
@@ -420,6 +491,7 @@ extension AppAuthExampleViewController {
 
             if let authState = authState {
                 self.setAuthState(authState)
+                self.state = request.state
                 self.logMessage("Got authorization tokens. Access token: \(authState.lastTokenResponse?.accessToken ?? "DEFAULT_TOKEN")")
             } else {
                 self.logMessage("Authorization error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")

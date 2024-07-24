@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lbK-Ta-T87">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y9n-3V-Se3">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -36,6 +36,17 @@
                     <view key="view" contentMode="scaleToFill" id="gWX-I6-FMg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="AXh-NQ-qyh">
+                                <rect key="frame" x="121" y="266" width="78" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Logout"/>
+                                <connections>
+                                    <action selector="logout:" destination="lbK-Ta-T87" eventType="touchUpInside" id="hLo-MG-hXl"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="J7y-AL-zpy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -44,7 +55,7 @@
             </objects>
             <point key="canvasLocation" x="-519" y="588"/>
         </scene>
-        <!--AppAuth-->
+        <!--App Auth Example View Controller-->
         <scene sceneID="MSK-bT-qb2">
             <objects>
                 <viewController id="0PH-Kh-abc" customClass="AppAuthExampleViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
@@ -158,7 +169,17 @@
                             <constraint firstItem="MVQ-Pt-k9A" firstAttribute="leading" secondItem="J0c-6M-Zog" secondAttribute="leading" constant="15" id="sGT-9S-uPw"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="AppAuth" id="aGf-MP-jNh">
+                    <navigationItem key="navigationItem" id="aGf-MP-jNh">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="8Rl-DI-ETX">
+                            <rect key="frame" x="121" y="4.5" width="78" height="35"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="Logout"/>
+                            <connections>
+                                <action selector="logout:" destination="0PH-Kh-abc" eventType="touchUpInside" id="h21-v2-nZh"/>
+                            </connections>
+                        </button>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="aGf-Yh-5YJ">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
