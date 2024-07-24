@@ -27,3 +27,15 @@ Printing description of json:
     scope = openid;
     "token_type" = Bearer;
 }
+
+
+// opens browser, and return code and veriefier
+// [OIDAuthorizationService
+      presentAuthorizationRequest:authorizationRequest
+                externalUserAgent:externalUserAgent
+                
+
+// use Code verifier, and create request
+                                   [authorizationResponse tokenExchangeRequest];
+
+  return [[OIDTokenRequest alloc] initWithConfiguration:_request.configuration

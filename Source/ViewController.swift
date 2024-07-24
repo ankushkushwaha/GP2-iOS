@@ -46,7 +46,9 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
             let request = OIDAuthorizationRequest(configuration: configuration,
                                                   clientId: kClientID!,
                                                   clientSecret: nil,
-                                                  scopes: [OIDScopeOpenID],
+                                                  scopes: ["b453a24f-79c5-45a2-b567-da7244a9af4e"
+                                                           ,OIDScopeOpenID,
+                                                           "offline_access"],
                                                   redirectURL: redirectURI,
                                                   responseType: OIDResponseTypeCode,
                                                   additionalParameters: nil)

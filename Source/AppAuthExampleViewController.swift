@@ -48,14 +48,14 @@ Solera2024!
 
 
 
-let kIssuer: String = "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9";
-let kClientID: String? = "53osemtot8tp3n3qct5r2hijk3";
-let kRedirectURI: String = "net.openid.appauthdemo:/oauth2redirect";
+//let kIssuer: String = "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9";
+//let kClientID: String? = "53osemtot8tp3n3qct5r2hijk3";
+//let kRedirectURI: String = "net.openid.appauthdemo:/oauth2redirect";
 
 
-//let kIssuer: String = "https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0";
-//let kClientID: String? = "b453a24f-79c5-45a2-b567-da7244a9af4e";
-//let kRedirectURI: String = "net.openid.appauthdemo://oauth2redirect/";
+let kIssuer: String = "https://soleranab2bnprd.b2clogin.com/SoleraNAB2BNPrd.onmicrosoft.com/B2C_1A_HRDSIGNIN_V2/v2.0";
+let kClientID: String? = "b453a24f-79c5-45a2-b567-da7244a9af4e";
+let kRedirectURI: String = "net.openid.appauthdemo://oauth2redirect/";
 
 
 
