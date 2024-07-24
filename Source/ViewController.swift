@@ -11,6 +11,13 @@ import UIKit
 import AppAuthCore
 import AppAuth
 
+//class GP2AuthState {
+//     var stateId: String?
+//     var accessToken: String?
+//     var refreshToken: String?
+//     var idToken: String?
+//}
+
 class ViewController: UIViewController, OIDAuthStateChangeDelegate {
     private var externalUserAlertSession: OIDExternalUserAgentSession!
 
@@ -21,7 +28,6 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
     
     
     private var authState: OIDAuthState?
-    private var stateId: String?
     private let issuer = URL(string: kIssuer)!
     private let clientID = kClientID
     private let redirectURI = URL(string: kRedirectURI)!
@@ -66,7 +72,7 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
             appDelegate.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self) { authState, error in
                 if let authState = authState {
                     self.setAuthState(authState)
-                    self.stateId = request.state
+                    
                     print("Got authorization tokens. Access token: \(authState.lastTokenResponse?.accessToken ?? "nil")")
                 } else {
                     print("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
@@ -82,12 +88,55 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
         }
     }
     
-    private func setAuthState(_ authState: OIDAuthState?) {
+    
+    func setAuthState(_ authState: OIDAuthState?) {
         if (self.authState == authState) {
             return;
         }
+        
+//        let state = GP2AuthState()
+//        state.stateId = stateId
+//        state.accessToken = authState?.lastTokenResponse?.accessToken
+//        state.refreshToken = authState?.lastTokenResponse?.refreshToken
+//        state.idToken = authState?.lastTokenResponse?.idToken
+
+
         self.authState = authState;
-        self.authState?.stateChangeDelegate = self
+        self.authState?.stateChangeDelegate = self;
+        self.stateChanged()
+    }
+    func stateChanged() {
+        self.saveState()
+//        self.updateUI()
+    }
+//    func updateUI() {
+//        
+//        self.codeExchangeButton.isEnabled = self.authState?.lastAuthorizationResponse.authorizationCode != nil && !((self.authState?.lastTokenResponse) != nil)
+//
+//    }
+    
+    func saveState() {
+
+        var data: Data? = nil
+
+        if let authState = self.authState {
+            data = NSKeyedArchiver.archivedData(withRootObject: authState)
+        }
+        
+        if let userDefaults = UserDefaults(suiteName: "group.net.openid.appauth.Example") {
+            userDefaults.set(data, forKey: kAppAuthExampleAuthStateKey)
+            userDefaults.synchronize()
+        }
+    }
+
+    func loadState() {
+        guard let data = UserDefaults(suiteName: "group.net.openid.appauth.Example")?.object(forKey: kAppAuthExampleAuthStateKey) as? Data else {
+            return
+        }
+
+        if let authState = NSKeyedUnarchiver.unarchiveObject(with: data) as? OIDAuthState {
+            self.setAuthState(authState)
+        }
     }
     
     public func logout(onSuccess: (() -> Void)? = nil) {
@@ -111,20 +160,18 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
 
         
         
-        guard let idToken = authState?.lastTokenResponse?.idToken else {
+        guard let idToken = authState?.lastTokenResponse?.idToken,
+              let state = authState?.lastAuthorizationResponse.state else {
             return
         }
         
-        guard let stateId = self.stateId else {
-            return
-        }
 
         let redirectUrl = URL(string: kRedirectURI)!
         let endSessionRequest = OIDEndSessionRequest(
             configuration: configuration,
             idTokenHint: idToken,
             postLogoutRedirectURL: redirectUrl,
-            state: stateId,
+            state: state,
             additionalParameters: nil)
 //
         let agent = OIDExternalUserAgentIOS(presenting: self)
@@ -150,7 +197,7 @@ class ViewController: UIViewController, OIDAuthStateChangeDelegate {
                     HTTPCookieStorage.shared.deleteCookie(cookie)
                 }
 
-//                    UserDefaults.standard.flushAllSaveData()
+                self.setAuthState(nil)
 
                 onSuccess?()
             }

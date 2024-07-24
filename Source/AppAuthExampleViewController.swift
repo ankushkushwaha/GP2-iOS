@@ -82,7 +82,6 @@ class AppAuthExampleViewController: UIViewController {
     @IBOutlet private weak var trashButton: UIBarButtonItem!
 
     private var authState: OIDAuthState?
-    private var state: String?
     private var externalUserAlertSession: OIDExternalUserAgentSession!
 
     override func viewDidLoad() {
@@ -154,11 +153,8 @@ extension AppAuthExampleViewController {
 
             
             
-            guard let idToken = authState?.lastTokenResponse?.idToken else {
-                return
-            }
-            
-            guard let state = self.state else {
+            guard let idToken = authState?.lastTokenResponse?.idToken,
+                  let state = authState?.lastAuthorizationResponse.state else {
                 return
             }
 
@@ -170,9 +166,9 @@ extension AppAuthExampleViewController {
                 postLogoutRedirectURL: redirectUrl,
                 state: state,
                 additionalParameters: nil)
-//
+
             let agent = OIDExternalUserAgentIOS(presenting: self)
-//
+
             self.externalUserAlertSession = OIDAuthorizationService.present(
                 endSessionRequest,
                 externalUserAgent: agent!) {[weak self] response, error in
@@ -190,12 +186,12 @@ extension AppAuthExampleViewController {
 
                     print("Authorization response: \(response)")
 
-//                    HTTPCookieStorage.shared.cookies?.forEach { cookie in
-//                        HTTPCookieStorage.shared.deleteCookie(cookie)
-//                    }
+                    HTTPCookieStorage.shared.cookies?.forEach { cookie in
+                        HTTPCookieStorage.shared.deleteCookie(cookie)
+                    }
 
-//                    UserDefaults.standard.flushAllSaveData()
-
+                    self.setAuthState(nil)
+                    
                     onSuccess?()
                 }
         }
@@ -231,85 +227,86 @@ extension AppAuthExampleViewController {
 
             if let clientId = kClientID {
                 self.doAuthWithAutoCodeExchange(configuration: config, clientID: clientId, clientSecret: nil)
-            } else {
-                self.doClientRegistration(configuration: config) { configuration, response in
-
-                    guard let configuration = configuration, let clientID = response?.clientID else {
-                        self.logMessage("Error retrieving configuration OR clientID")
-                        return
-                    }
-
-                    self.doAuthWithAutoCodeExchange(configuration: configuration,
-                                                    clientID: clientID,
-                                                    clientSecret: response?.clientSecret)
-                }
             }
+//             else {
+//                self.doClientRegistration(configuration: config) { configuration, response in
+//
+//                    guard let configuration = configuration, let clientID = response?.clientID else {
+//                        self.logMessage("Error retrieving configuration OR clientID")
+//                        return
+//                    }
+//
+//                    self.doAuthWithAutoCodeExchange(configuration: configuration,
+//                                                    clientID: clientID,
+//                                                    clientSecret: response?.clientSecret)
+//                }
+//            }
         }
 
     }
 
     @IBAction func authNoCodeExchange(_ sender: UIButton) {
-
-        guard let issuer = URL(string: kIssuer) else {
-            self.logMessage("Error creating URL for : \(kIssuer)")
-            return
-        }
-
-        self.logMessage("Fetching configuration for issuer: \(issuer)")
-
-        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { configuration, error in
-
-            if let error = error  {
-                self.logMessage("Error retrieving discovery document: \(error.localizedDescription)")
-                return
-            }
-
-            guard let configuration = configuration else {
-                self.logMessage("Error retrieving discovery document. Error & Configuration both are NIL!")
-                return
-            }
-
-            self.logMessage("Got configuration: \(configuration)")
-
-            if let clientId = kClientID {
-
-                self.doAuthWithoutCodeExchange(configuration: configuration, clientID: clientId, clientSecret: nil)
-
-            } else {
-
-                self.doClientRegistration(configuration: configuration) { configuration, response in
-
-                    guard let configuration = configuration, let response = response else {
-                        return
-                    }
-
-                    self.doAuthWithoutCodeExchange(configuration: configuration,
-                                                   clientID: response.clientID,
-                                                   clientSecret: response.clientSecret)
-                }
-            }
-        }
+//
+//        guard let issuer = URL(string: kIssuer) else {
+//            self.logMessage("Error creating URL for : \(kIssuer)")
+//            return
+//        }
+//
+//        self.logMessage("Fetching configuration for issuer: \(issuer)")
+//
+//        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { configuration, error in
+//
+//            if let error = error  {
+//                self.logMessage("Error retrieving discovery document: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            guard let configuration = configuration else {
+//                self.logMessage("Error retrieving discovery document. Error & Configuration both are NIL!")
+//                return
+//            }
+//
+//            self.logMessage("Got configuration: \(configuration)")
+//
+//            if let clientId = kClientID {
+//
+//                self.doAuthWithoutCodeExchange(configuration: configuration, clientID: clientId, clientSecret: nil)
+//
+//            } else {
+//
+//                self.doClientRegistration(configuration: configuration) { configuration, response in
+//
+//                    guard let configuration = configuration, let response = response else {
+//                        return
+//                    }
+//
+//                    self.doAuthWithoutCodeExchange(configuration: configuration,
+//                                                   clientID: response.clientID,
+//                                                   clientSecret: response.clientSecret)
+//                }
+//            }
+//        }
     }
 
-    @IBAction func codeExchange(_ sender: UIButton) {
-
-        guard let tokenExchangeRequest = self.authState?.lastAuthorizationResponse.tokenExchangeRequest() else {
-            self.logMessage("Error creating authorization code exchange request")
-            return
-        }
-
-        self.logMessage("Performing authorization code exchange with request \(tokenExchangeRequest)")
-
-        OIDAuthorizationService.perform(tokenExchangeRequest) { response, error in
-
-            if let tokenResponse = response {
-                self.logMessage("Received token response with accessToken: \(tokenResponse.accessToken ?? "DEFAULT_TOKEN")")
-            } else {
-                self.logMessage("Token exchange error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
-            }
-            self.authState?.update(with: response, error: error)
-        }
-    }
+//    @IBAction func codeExchange(_ sender: UIButton) {
+//
+//        guard let tokenExchangeRequest = self.authState?.lastAuthorizationResponse.tokenExchangeRequest() else {
+//            self.logMessage("Error creating authorization code exchange request")
+//            return
+//        }
+//
+//        self.logMessage("Performing authorization code exchange with request \(tokenExchangeRequest)")
+//
+//        OIDAuthorizationService.perform(tokenExchangeRequest) { response, error in
+//
+//            if let tokenResponse = response {
+//                self.logMessage("Received token response with accessToken: \(tokenResponse.accessToken ?? "DEFAULT_TOKEN")")
+//            } else {
+//                self.logMessage("Token exchange error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
+//            }
+//            self.authState?.update(with: response, error: error)
+//        }
+//    }
 
     @IBAction func userinfo(_ sender: UIButton) {
 
@@ -430,36 +427,36 @@ extension AppAuthExampleViewController {
 //MARK: AppAuth Methods
 extension AppAuthExampleViewController {
 
-    func doClientRegistration(configuration: OIDServiceConfiguration, callback: @escaping PostRegistrationCallback) {
-
-        guard let redirectURI = URL(string: kRedirectURI) else {
-            self.logMessage("Error creating URL for : \(kRedirectURI)")
-            return
-        }
-
-        let request: OIDRegistrationRequest = OIDRegistrationRequest(configuration: configuration,
-                                                                     redirectURIs: [redirectURI],
-                                                                     responseTypes: nil,
-                                                                     grantTypes: nil,
-                                                                     subjectType: nil,
-                                                                     tokenEndpointAuthMethod: "client_secret_post",
-                                                                     additionalParameters: nil)
-
-        // performs registration request
-        self.logMessage("Initiating registration request")
-
-        OIDAuthorizationService.perform(request) { response, error in
-
-            if let regResponse = response {
-                self.setAuthState(OIDAuthState(registrationResponse: regResponse))
-                self.logMessage("Got registration response: \(regResponse)")
-                callback(configuration, regResponse)
-            } else {
-                self.logMessage("Registration error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
-                self.setAuthState(nil)
-            }
-        }
-    }
+//    func doClientRegistration(configuration: OIDServiceConfiguration, callback: @escaping PostRegistrationCallback) {
+//
+//        guard let redirectURI = URL(string: kRedirectURI) else {
+//            self.logMessage("Error creating URL for : \(kRedirectURI)")
+//            return
+//        }
+//
+//        let request: OIDRegistrationRequest = OIDRegistrationRequest(configuration: configuration,
+//                                                                     redirectURIs: [redirectURI],
+//                                                                     responseTypes: nil,
+//                                                                     grantTypes: nil,
+//                                                                     subjectType: nil,
+//                                                                     tokenEndpointAuthMethod: "client_secret_post",
+//                                                                     additionalParameters: nil)
+//
+//        // performs registration request
+//        self.logMessage("Initiating registration request")
+//
+//        OIDAuthorizationService.perform(request) { response, error in
+//
+//            if let regResponse = response {
+//                self.setAuthState(OIDAuthState(registrationResponse: regResponse))
+//                self.logMessage("Got registration response: \(regResponse)")
+//                callback(configuration, regResponse)
+//            } else {
+//                self.logMessage("Registration error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
+//                self.setAuthState(nil)
+//            }
+//        }
+//    }
 
     func doAuthWithAutoCodeExchange(configuration: OIDServiceConfiguration, clientID: String, clientSecret: String?) {
 
@@ -491,7 +488,6 @@ extension AppAuthExampleViewController {
 
             if let authState = authState {
                 self.setAuthState(authState)
-                self.state = request.state
                 self.logMessage("Got authorization tokens. Access token: \(authState.lastTokenResponse?.accessToken ?? "DEFAULT_TOKEN")")
             } else {
                 self.logMessage("Authorization error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
