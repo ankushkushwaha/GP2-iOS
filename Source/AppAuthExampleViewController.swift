@@ -167,8 +167,8 @@ extension AppAuthExampleViewController {
                 state: state,
                 additionalParameters: nil)
 
-            let agent = OIDExternalUserAgentIOS(presenting: self)
-
+            let agent = OIDExternalUserAgentIOS(presenting: self, prefersEphemeralSession: true)
+           
             self.externalUserAlertSession = OIDAuthorizationService.present(
                 endSessionRequest,
                 externalUserAgent: agent!) {[weak self] response, error in
@@ -484,7 +484,7 @@ extension AppAuthExampleViewController {
         // performs authentication request
         logMessage("Initiating authorization request with scope: \(request.scope ?? "DEFAULT_SCOPE")")
 
-        appDelegate.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self) { authState, error in
+        appDelegate.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self, prefersEphemeralSession: true) { authState, error in
 
             if let authState = authState {
                 self.setAuthState(authState)

@@ -172,7 +172,7 @@
                     <navigationItem key="navigationItem" id="aGf-MP-jNh">
                         <nil key="title"/>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="8Rl-DI-ETX">
-                            <rect key="frame" x="121" y="4.5" width="78" height="35"/>
+                            <rect key="frame" x="121" y="7.5" width="78" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="Logout"/>
